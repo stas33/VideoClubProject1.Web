@@ -1,0 +1,231 @@
+﻿
+@model VideoClubProject1.Web.Areas.Users.Models.RentalsPerCustomerViewModel
+
+@{
+    ViewBag.Title = "ActiveRentals";
+}
+
+<h2>Rentals of User</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.history.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.RenterFullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.RentalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.ExpectedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.ReturnDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.MovieId.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.PhysicalCopyId)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.rentalsOfCustomer)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RenterFullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RentalDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate, new { @class = "date" })
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.MovieId.Title)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhysicalCopyId)
+            </td>
+
+            <td>
+                @if (!item.ReturnDate.Equals(VideoClubProject1.Core.Enumerations.ReturnType.Scheduled))
+                {
+                    @*@Html.ActionLink("Update return date", "UpdateDateStatus", "Histories", new { Area = "Histories", id = item.Id, fname = item.RenterFullName }, new { @class = "btn btn-primary" }) *@
+                    @*<a class="btn btn-primary" onclick="UpdateDate('@Url.Action("UpdateDateStatus", "Histories", new { Area = "Histories", id = item.Id, fname = item.RenterFullName})')">Update return date</a> *@
+                    @*<a href="#" onclick="getRental('@item.Id', '@item.RenterFullName');" class="btn btn-primary"> Update return date</a> *@
+
+                    @*<a href="#" id="btnSave" data-id="@item.Id" class="btn btn-primary"> Update return date</a>*@
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+<script type="text/javascript">
+    function getRental(userid, fname) {
+        var url = "/Histories/Histories/UpdateDateStatus/" + userid + "?fname=" + fname;
+        $("#ModalTitle").html("Update Return Date");
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#Id").val(obj.Id);
+                $("#Userid").val(userid);
+                $("#Movieid").val(obj.MovieId.Id);
+                $("#Rentfname").val(fname);
+                $("#Rentdate").val(obj.RentalDate);
+                $("#Expdate").val(obj.ExpectedDate);
+                $("#Copyid").val(obj.PhysicalCopyId);
+                $("#Retdate option:selected").val(obj.ReturnDate);
+                $('#MyModal').modal("show");
+            }
+        });
+    }
+</script>
+
+
+@section scripts {
+<script type="text/javascript">
+    $(document).ready(function () {
+    @*function getRental(userid, fname) {
+        var url = "/Histories/Histories/UpdateDateStatus/" + userid + "?fname=" + fname;
+        $("#ModalTitle").html("Update Return Date");
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#Id").val(obj.Id);
+                $("#Userid").val(userid);
+                $("#Movieid").val(obj.MovieId.Id);
+                $("#Rentfname").val(fname);
+                $("#Rentdate").val(obj.RentalDate);
+                $("#Expdate").val(obj.ExpectedDate);
+                $("#Copyid").val(obj.PhysicalCopyId);
+                $("#Retdate option:selected").val(obj.ReturnDate);
+                $('#MyModal').modal("show");
+            }
+        });
+    }*@
+
+
+    $('.update').on('click', function (e) {
+        let button = $(e.target);
+        var form = $("#SubmitForm").serialize();
+        $.ajax({
+            url: '@Url.Action("UpdateReturnDate", "Histories", new { Area = "Histories" })',
+            data: form,
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+            @* var td = $(this).closest("tr").find("td");
+                $("#Retdate option:selected").val($(td).eq(5).html()); *@
+            let row = $(this).closest("tr");
+            console.log(row);
+            let td = row.find("td:eq(4)").html();
+            console.log(td);
+
+            @* window.location.reload(); *@
+            alert(response.Message);
+            $("#MyModal").modal("hide");
+
+            }
+
+            });
+
+            })
+
+
+            function Update() {
+            var form = $("#SubmitForm").serialize();
+            $.ajax({
+            url: '@Url.Action("UpdateReturnDate", "Histories", new { Area = "Histories" })',
+            data: form,
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+            @* var td = $(this).closest("tr").find("td");
+                $("#Retdate option:selected").val($(td).eq(5).html()); *@
+
+            window.location.reload();
+            alert(response.Message);
+            $("#MyModal").modal("hide");
+
+            }
+
+            });
+            }
+    })
+</script>
+    }
+
+
+<div id="MyModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Rental Info</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body" id="UpdatePage">
+                <fieldset id="SubmitForm">
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.history.Id, new { @readonly = "readonly", @id = "Id" })
+                    </div>
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.history.UserId.Id, new { @readonly = "readonly", @id = "Userid" })
+                    </div>
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.history.MovieId.Id, new { @readonly = "readonly", @id = "Movieid" })
+                    </div>
+                    <div class="form-group">
+                        <label>Renter's FullName:</label>
+                        @Html.TextBoxFor(model => model.history.RenterFullName, new { @readonly = "readonly", @id = "Rentfname" })
+                    </div>
+                    <div class="form-group">
+                        <label>Rental Date:</label>
+                        @Html.TextBoxFor(model => model.history.RentalDate, new { @readonly = "readonly", @id = "Rentdate" })
+                    </div>
+                    <div class="form-group">
+                        <label>Expected Date:</label>
+                        @Html.TextBoxFor(model => model.history.ExpectedDate, new { @readonly = "readonly", @id = "Expdate" })
+                    </div>
+                    <div class="form-group">
+                        <label>Return status:</label>
+                        @Html.EnumDropDownListFor(model => model.history.ReturnDate, htmlAttributes: new { @class = "form-control", @id = "Retdate" })
+                        @Html.ValidationMessageFor(model => model.history.ReturnDate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Copy Id:</label>
+                        @Html.TextBoxFor(model => model.history.PhysicalCopyId, new { @readonly = "readonly", @id = "Copyid" })
+                    </div>
+                    <div class="form-group">
+                        @*<a href="#" class="btn btn-block btn-success" onclick="btn;">Update</a>*@
+                        <input type="submit" value="Update" @*onclick="return Update();"*@ class="btn btn-success update" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+

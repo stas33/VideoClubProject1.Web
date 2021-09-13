@@ -1,0 +1,56 @@
+﻿@model VideoClubProject1.Core.Entities.History
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RenterFullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RenterFullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RentalDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RentalDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReturnDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhysicalCopyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhysicalCopyId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", "Users", new { Area = "Users" }, new { @class = "btn btn-primary" })
+</p>

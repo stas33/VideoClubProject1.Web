@@ -1,0 +1,32 @@
+﻿@model VideoClubProject1.Web.Areas.Copies.Models.CopyAvailabilityViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <h4>Searching for Copies </h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumOfCopies)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumOfCopies)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Availability)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Availability)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", "Movies", new { Area = "Movies"}, new { @class = "btn btn-primary" })
+</p>

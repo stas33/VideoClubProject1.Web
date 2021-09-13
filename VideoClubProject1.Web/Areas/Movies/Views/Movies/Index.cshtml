@@ -1,0 +1,111 @@
+﻿@model VideoClubProject1.Infrastructure.Models.PaginationModel<VideoClubProject1.Web.Areas.Movies.Models.MovieViewModel>
+
+<link ="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Movies";
+}
+
+<h2>Available Movies</h2>
+
+
+@using (Html.BeginForm("Index", "Movies", FormMethod.Get))
+
+{
+    <div class="form-group">
+        <label for="currentFilter">Find by title:</label>
+        @Html.TextBox("currentFilter", null, new { @type = "text", @class = "form-control", @placeholder = "Type the title" })
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+
+    <div class="form-group">
+        <label for="movieType">Find by type:</label>
+        @Html.DropDownList("movieType", EnumHelper.GetSelectList(typeof(VideoClubProject1.Core.Enumerations.MovieType)), "Select Type", new { @class = "form-control", onchange = "this.form.submit();" })
+    </div>
+
+}
+
+<table class="table">
+
+    <tr>
+        <th>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter, curType = ViewBag.CurType })
+
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Type
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Items)
+    {
+
+        <tr>
+            <td>
+                @item.Title
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.Type
+            </td>
+            <td>
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" }) <span>  |  </span>
+
+                    @Html.ActionLink("Check availability", "Details", "Copies", new { Area = "Copies", id = item.Id }, new { @class = "btn btn-primary" }) <span>  |  </span>
+
+                    @Html.ActionLink("Rent movie", "CreateRental", "Histories", new { Area = "Histories", title = item.Title }, new { @class = "btn btn-primary" }) <span>  |  </span>
+                }
+                @if (Request.IsAuthenticated)
+                {
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" })
+                }
+
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })  | *@
+                @*@Html.ActionLink("Rent this movie", "Create", "Users", new { id = item.Id}, null) *@
+            </td>
+        </tr>
+
+    }
+</table>
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Create new movie", "Create", new { Area = "Movies" }, new { @class = "btn btn-primary" })
+    }
+</p>
+<br />
+<p>
+    Page @(Model.PageCount < Model.PageNum ? 0 : Model.PageNum) of @Model.PageCount
+</p>
+
+@if (Model.PageNum > 1)
+{
+    <a href="@Url.Action("Index", new { page = 1})"
+       class="btn btn-default">
+        &laquo; First
+    </a>
+    <a href="@Url.Action("Index", new { page = Model.PageNum - 1})"
+       class="btn btn-default">
+        &laquo; Previous
+    </a>
+
+}
+@if (Model.PageNum < Model.PageCount)
+{
+    <a href="@Url.Action("Index", new { page = Model.PageNum + 1})"
+       class="btn btn-default">
+        Next &raquo;
+    </a>
+    <a href="@Url.Action("Index", new { page = Model.PageCount})"
+       class="btn btn-default">
+        Last &raquo;
+    </a>
+}

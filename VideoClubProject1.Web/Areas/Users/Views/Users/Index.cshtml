@@ -1,0 +1,46 @@
+﻿@model VideoClubProject1.Web.Areas.Users.Models.CustomerViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Registered Customers</h2>
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.User.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Rentals)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.customers)
+    {
+
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rentals)
+            </td>
+            <td>
+                @Html.ActionLink("Rentals of user", "ActiveRentals", "Users", new { Area = "Users", id = item.Id }, new { @class = "btn btn-primary" }) |
+                @Html.ActionLink("Rent a movie", "CreateRental", "Histories", new { Area = "Histories", username = item.UserName }, new { @class = "btn btn-primary" })
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }) *@
+            </td>
+        </tr>
+
+    }
+
+</table>

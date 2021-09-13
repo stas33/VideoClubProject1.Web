@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "NotFound";
+}
+
+<h2>
+    No result! The username you entered does not exist...
+</h2>
+
+@Html.ActionLink("Back to movies list", "Index", "Movies", new { Area = "Movies" }, new { @class = "btn btn-primary" })

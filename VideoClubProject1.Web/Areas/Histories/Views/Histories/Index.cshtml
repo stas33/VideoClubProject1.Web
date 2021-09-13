@@ -1,0 +1,63 @@
+﻿@model  VideoClubProject1.Web.Areas.Histories.Models.RentalViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Rentals history</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.history.RenterFullName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.history.RentalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.ExpectedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.ReturnDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.MovieId.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.history.PhysicalCopyId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.rentalslist)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RenterFullName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.RentalDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <th>
+                @Html.DisplayFor(model => item.MovieId.Title)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhysicalCopyId)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", "Users", new { id = item.Id }, null) *@
+            </td>
+        </tr>
+    }
+
+</table>
